@@ -746,6 +746,12 @@ shinyServer(function(input, output, session) {
 
   annotViewer.options <- list(orderClasses = TRUE, bCaseInsensitive = TRUE,
     lengthMenu = c(15, 50, 100, 200, 500), pageLength = 15,
+    # make odd rows white
+    initComplete = JS(
+      "function(settings, json) {",
+        "$('table.dataTable.display tbody tr.odd').css('background-color', 'white');",
+      "}"
+    ),
     "dom" = 'T<"clear">lfrtip',
     "oTableTools" = list(
       "sSwfPath" = "/tabletools/swf/copy_csv_xls_pdf.swf",
