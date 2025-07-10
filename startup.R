@@ -1,4 +1,4 @@
-packages <- c("shiny", "plyr", "tools", "xtable", "devtools", "markdown", "jsonlite", "shinyjs", "rintrojs", "RCurl", "yaml", "future", "promises")
+packages <- c("shiny", "plyr", "tools", "xtable", "devtools", "markdown", "jsonlite", "shinyjs", "rintrojs", "RCurl", "yaml", "future", "promises", "DT")
 if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packages, rownames(installed.packages())))  
 }

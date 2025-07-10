@@ -9,6 +9,8 @@ library(promises)
 library(future)
 plan(multisession)
 
+library(DT)
+
 shinyServer(function(input, output, session) {
   #Load any saved datasets
   values <- reactiveValues(urlStatus = logical(nrow(gwas.sources)))
@@ -659,10 +661,10 @@ shinyServer(function(input, output, session) {
       ),
       tabPanel(title="Data Table",value="Table",
         tags$div(id = "tour-datatable",
-          wellPanel(dataTableOutput("dataviewer"), style = paste0("background-color: ", bgColors[1], ";"))
+          wellPanel(DTOutput("dataviewer"), style = paste0("background-color: ", bgColors[1], ";"))
         ),
         conditionalPanel(condition = comparing2Species,
-          wellPanel(dataTableOutput("dataviewer2"), style = paste0("background-color: ", bgColors[2], ";"))
+          wellPanel(DTOutput("dataviewer2"), style = paste0("background-color: ", bgColors[2], ";"))
         )
       ),
       tabPanel(title="Whole Genome View",value="WhGen",
@@ -732,10 +734,10 @@ shinyServer(function(input, output, session) {
       ),
       tabPanel(title="Annotations Table",value="Annot",
         tags$div(id = "tour-annotations",
-          wellPanel(dataTableOutput("annotViewer"), style = paste0("background-color: ", bgColors[1], ";"))
+          wellPanel(DTOutput("annotViewer"), style = paste0("background-color: ", bgColors[1], ";"))
         ),
         conditionalPanel(condition = comparing2Species,
-          wellPanel(dataTableOutput("annotViewer2"), style = paste0("background-color: ", bgColors[2], ";"))
+          wellPanel(DTOutput("annotViewer2"), style = paste0("background-color: ", bgColors[2], ";"))
         )
       )
     )#end tabsetPanel
@@ -757,10 +759,10 @@ shinyServer(function(input, output, session) {
       )
     )                    
   )
-  output$annotViewer <- renderDataTable({
+  output$annotViewer <- renderDT({
     createAnnotTable(1)
   }, options = annotViewer.options, escape = FALSE)
-  output$annotViewer2 <- renderDataTable({
+  output$annotViewer2 <- renderDT({
     createAnnotTable(2)
   }, options = annotViewer.options, escape = FALSE)
 
@@ -794,8 +796,8 @@ shinyServer(function(input, output, session) {
     # html <- sub("<TABLE border=1>","<table class='table table-condensed table-hover'>", html)
     # html
   }
-  output$dataviewer <-renderDataTable(createDataViewer(1), options = dataViewer.options, escape = FALSE)
-  output$dataviewer2 <-renderDataTable(createDataViewer(2), options = dataViewer.options, escape = FALSE)
+  output$dataviewer <-renderDT(createDataViewer(1), options = dataViewer.options, escape = FALSE)
+  output$dataviewer2 <-renderDT(createDataViewer(2), options = dataViewer.options, escape = FALSE)
   
   createDownloadAnnot <- function(j) {
     downloadHandler(
