@@ -10,6 +10,8 @@ create_gChart <- function(j, input, values) {
   
   #subset whole chart based on selection
   genomeChart <- values[[input[[jth_ref("datasets", j)]]]]
+  selcom <- trimws(input[[jth_ref("dv_select", j)]])
+  if (selcom != "") genomeChart <- applyGlobalFilter(genomeChart, selcom)
   if(input[[jth_ref("plotAll", j)]] == FALSE){
     for(i in input[[jth_ref("traitColumns", j)]]){
       genomeChart <- genomeChart[genomeChart[,i] %in% input[[jth_ref(i, j)]],]

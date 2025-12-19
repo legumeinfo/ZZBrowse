@@ -9,6 +9,8 @@ create_pChart <- function(j, input, values) {
   #subset whole chart based on selection
   chromChart <- values[[input[[jth_ref("datasets", j)]]]]
   chromChart <- chromChart[chromChart[,input[[jth_ref("chrColumn", j)]]]==input[[jth_ref("chr", j)]],]
+  selcom <- trimws(input[[jth_ref("dv_select", j)]])
+  if (selcom != "") chromChart <- applyGlobalFilter(chromChart, selcom)
   
   if(input[[jth_ref("plotAll", j)]]==FALSE){
     for(i in input[[jth_ref("traitColumns", j)]]){

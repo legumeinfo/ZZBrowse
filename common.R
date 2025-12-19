@@ -256,4 +256,18 @@ read.metadata <- function(fin) {
   metadata
 }
 
+# Apply fltr (a valid R logical expression) to dataset
+applyGlobalFilter <- function(dataset, fltr) {
+  if (fltr != '') {
+    seldat <- try(do.call(subset, list(dataset, parse(text = fltr))), silent = TRUE)
+    if (!is(seldat, 'try-error')) {
+      if (is.data.frame(seldat)) {
+        dataset <- seldat
+        seldat <- NULL
+      }
+    }
+  }
+  dataset
+}
+
 # --------------------------------------------------------------

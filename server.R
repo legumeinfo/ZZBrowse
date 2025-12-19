@@ -241,7 +241,7 @@ shinyServer(function(input, output, session) {
       uiOutput(jth_ref("columns", j)),
       tags$br(),tags$br(),tags$br(),tags$br(),tags$br(),tags$br(), #add some space between selection columns and subset search
       # uiOutput("view_order"), checkboxInput("view_order_desc", "DESC", value = FALSE),
-      returnTextInput(jth_ref("dv_select", j), "Subset (e.g., RMIP > 20 & Location == 'FL06')", '')
+      returnTextInput(jth_ref("dv_select", j), paste("Subset, e.g.", ifelse(j == 1, "trait == 'Days to flower'", "grepl('seed', trait, ignore.case = TRUE) & p_value < 1e-10")), '')
     )
   }
   
@@ -781,19 +781,8 @@ shinyServer(function(input, output, session) {
     
     if(!all(input[[jth_ref("columns", j)]] %in% colnames(dat))) return()
     
-    if(input[[jth_ref("dv_select", j)]] != '') {
-      selcom <- input[[jth_ref("dv_select", j)]]
-      selcom <- gsub(" ", "", selcom)
-      
-      seldat <- try(do.call(subset, list(dat,parse(text = selcom))), silent = TRUE)
-      
-      if(!is(seldat, 'try-error')) {
-        if(is.data.frame(seldat)) {
-          dat <- seldat
-          seldat <- NULL
-        }
-      }
-    }
+    selcom <- trimws(input[[jth_ref("dv_select", j)]])
+    if (selcom != "") dat <- applyGlobalFilter(dat, selcom)
     
     dat <- data.frame(dat[, input[[jth_ref("columns", j)]], drop = FALSE])
     dat
