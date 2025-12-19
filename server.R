@@ -608,7 +608,7 @@ shinyServer(function(input, output, session) {
     dat <- getdata(j)
     if (is.null(dat) || nrow(dat) == 0 || is.null(dat$publication)) return()
 
-    pubs <- unique(dat$publication)
+    pubs <- setdiff(dat$publication, "")
     ss <- sapply(pubs, function(pub) stri_match_first(pub,
       regex = "title='(.+)' target=_blank>(.+)</a>"))
     pp <- sort(sprintf("<p>%s. %s</p>", ss[3, ], ss[2, ]))
@@ -1230,6 +1230,8 @@ shinyServer(function(input, output, session) {
     cols <- tolower(names(loaded.values))
     k <- which(startsWith(cols, "chr"))
     loaded.values[, k] <- as.character(loaded.values[, k])
+    # Ensure that there is a publication column
+    if (is.null(loaded.values$publication)) loaded.values$publication <- ""
 
     if (appendSNPs) {
       dsj <- jth_ref("datasets", j)
